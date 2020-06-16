@@ -64,14 +64,14 @@ router.post('/myclasses', function (req, res, next){
 });
 
 router.get('/myclasses/:snumber', function (req, res, next){
-    
+
     conn.query('SELECT * FROM MYCLASSES WHERE Snumber = ?', [req.params.snumber], function (err, rows, fields) {
         if (!err) {
             if(rows.length == 0){
                 res.send(rows)
             }else{
                 let jason = JSON.parse(JSON.stringify(rows));
-            
+
                 for(let i = 0; i < jason.length; i++){
                     let timetable = JSON.parse(jason[i].Timetable);
                     let send_jason = new Array();

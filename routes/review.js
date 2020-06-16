@@ -60,7 +60,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
                         temp2 = parseInt(rows[0].Count);
                         let count = parseInt(temp2 + 1);
                         score = score + temp1;
-                        
+
                         await conn.query('UPDATE TIMETABLE SET Sumscore = ?, Count = ? WHERE Dname = ? AND Lname = ? AND Professor = ?', [score, count, params[1], params[2], params[3]], async function (err, rows, fields) {
                             if (!err) {
                                 console.log("rows : " + rows);
