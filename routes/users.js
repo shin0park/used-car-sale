@@ -11,7 +11,6 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-
     conn.query('SELECT * FROM DEPARTMENT', function (err, rows, fields) {
         if (!err) {
             res.json(rows);

@@ -3,6 +3,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var db_config = require('../db_config/ajoutt_db.js');
 var conn = mysql.createConnection(db_config);
+var sql_register3 = 'SELECT * FROM CAR AS C WHERE C.SerialNo IN (SELECT PurSerialNo FROM PURCHASE WHERE PId= ?)';
 var sql_register = 'SELECT * FROM PRODUCT AS E WHERE E.Vin IN (SELECT PVin FROM PURCHASE WHERE PId= ?)';
 var sql_register2 = 'SELECT * FROM CAR AS C WHERE C.SerialNo IN (SELECT PSerialNo FROM PRODUCT AS E WHERE E.Vin IN (SELECT PVin FROM PURCHASE WHERE PId= ?))';
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
@@ -11,7 +12,7 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 router.get('/', async (req, res, next) => {
     try {
         const id = req.user.Id;
-        await conn.query(sql_register2, [id], function (err, rows, fields) {
+        await conn.query(sql_register3, [id], function (err, rows, fields) {
             if (!err) {
                 console.log("rows : " + rows);
             } else {
@@ -40,7 +41,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
             params.push(jsonObj[obj]);
         }
         console.log(params);
-        await conn.query('INSERT INTO PURCHASE (PId, PVin, PDate) VALUES(?,?,?)', params, function (err, results, fields) {
+        await conn.query('INSERT INTO PURCHASE (PId, PurSerialNo, PDate) VALUES(?,?,?)', params, function (err, results, fields) {
             if (err) {
                 console.log("ERROR : " + err);
             } else {
