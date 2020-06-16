@@ -23,31 +23,28 @@ router.get('/', async (req, res, next) => {
         return next(err);
     }
 });
-// //구매목록 생성
-// router.post('/', isLoggedIn, async (req, res, next) => {
-//     const id = req.user.Id;
-//     try {
-//         let params = [];
-//         let jsonObj = req.body;
-//         console.log(jsonObj);
-//         params = [];
-//         params.push(id);
-//         for (var obj in jsonObj) {
-//             console.log(obj);
-//             params.push(jsonObj[obj]);
-//         }
-//         console.log(params);
-//         await conn.query('INSERT INTO PURCHASE (PId, PVin, PDate) VALUES(?,?,?)', params, function (err, results, fields) {
-//             if (err) {
-//                 console.log("ERROR : " + err);
-//             } else {
-//                 console.log("success");
-//             }
-//         });
-//         res.send("successPurchase");
-//     } catch (error) {
-//         console.error(error);
-//         return next(error);
-//     }
-// });
+//판매목록 추가
+router.post('/', isLoggedIn, async (req, res, next) => {
+    try {
+        let params = [];
+        let jsonObj = req.body;
+        console.log(jsonObj);
+        for (var obj in jsonObj) {
+            console.log(obj);
+            params.push(jsonObj[obj]);
+        }
+        console.log(params);
+        await conn.query('INSERT INTO PRODUCT (PSerialNo, Color, OdometerValue, YearProduced, EngineFuel, EngineCapacity, BodyType, PriceUsd, IsExchangeable, IsFixed, DurationListed) VALUES(?,?,?,?,?,?,?,?,?,?,?)', params, function (err, results, fields) {
+            if (err) {
+                console.log("ERROR : " + err);
+            } else {
+                console.log("success");
+            }
+        });
+        res.send("successProduct");
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
+});
 module.exports = router;
