@@ -5,6 +5,7 @@ var db_config = require('../db_config/ajoutt_db.js');
 var conn = mysql.createConnection(db_config);
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var sql_register = 'SELECT * FROM PRODUCT';
+var sql_register2 = "SELECT SerialNo FROM CAR AS C WHERE C.ManufacturerName = ? AND C.ModelName = ? AND C.Transmission = ? ";
 //등록된 판매목록 불러오기
 router.get('/', async (req, res, next) => {
     try {
@@ -24,27 +25,48 @@ router.get('/', async (req, res, next) => {
     }
 });
 //판매목록 추가
-router.post('/', isLoggedIn, async (req, res, next) => {
+router.post('/add', isLoggedIn, async (req, res, next) => {
     try {
         let params = [];
+        let tmp =[];
         let jsonObj = req.body;
+        let params2 = [];
+        let serialNo = "";
         console.log(jsonObj);
         for (var obj in jsonObj) {
-            console.log(obj);
             params.push(jsonObj[obj]);
         }
-        console.log(params);
-        await conn.query('INSERT INTO PRODUCT (PSerialNo, Color, OdometerValue, YearProduced, EngineFuel, EngineCapacity, BodyType, PriceUsd, IsExchangeable, IsFixed, DurationListed) VALUES(?,?,?,?,?,?,?,?,?,?,?)', params, function (err, results, fields) {
-            if (err) {
-                console.log("ERROR : " + err);
+        for(let i = 0; i < 3; i++){
+            tmp[i] = params[i];
+        }
+        console.log(tmp);
+        await conn.query(sql_register2, tmp, function (err, rows, fields) {
+            if (!err) {
+                console.log("rows : " + rows);
+                console.log(rows);
+                console.log(rows.SerialNo);
+                serialNo = rows[0].SerialNo;
+                params2[0] =serialNo;
+                for(let i = 3; i < params.length; i++){
+                    params2[i-2] = params[i];
+                }
+                console.log(params2);
+                conn.query('INSERT INTO PRODUCT (PSerialNo, Color, OdometerValue, YearProduced, EngineFuel, EngineCapacity, BodyType, PriceUsd, IsExchangeable, IsFixed) VALUES(?,?,?,?,?,?,?,?,?,?)', params2, function (err, results, fields) {
+                    if (err) {
+                        console.log("ERROR : " + err);
+                    } else {
+                        console.log("success");
+                        res.send("successProduct");
+                    }
+                });
             } else {
-                console.log("success");
+                console.log("ERROR : " + err);
             }
         });
-        res.send("successProduct");
     } catch (error) {
         console.error(error);
         return next(error);
     }
 });
+
 module.exports = router;

@@ -66,7 +66,7 @@ router.post('/register', isNotLoggedIn, async (req, res, next) => {
     }
 });
 //로그인
-router.post('/login', isNotLoggedIn, (req, res, next) => {//req.body.sNumber / req.body.password
+router.post('/login', isNotLoggedIn, (req, res, next) => {//req.body.id / req.body.password
     passport.authenticate('local', (authError, user, info) => {//에러, 성공, 실패
         if (authError) {
             console.error(authError);
