@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var db_config = require('../db_config/ajoutt_db.js');
 var conn = mysql.createConnection(db_config);
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
-var sql_register = 'SELECT * FROM PRODUCT';
+var sql_register = 'SELECT PSerialNo, ManufacturerName, ModelName, Transmission, Bodytype, Color, OdometerValue, EngineFuel, EngineCapacity, YearProduced, PriceUsd, IsExchangeable, IsFixed, Vin FROM CAR, PRODUCT WHERE CAR.SerialNo=PRODUCT.PSerialNo ';
 var sql_register2 = "SELECT SerialNo FROM CAR AS C WHERE C.ManufacturerName = ? AND C.ModelName = ? AND C.Transmission = ? ";
 //등록된 판매목록 불러오기
 router.get('/', async (req, res, next) => {
@@ -12,6 +12,7 @@ router.get('/', async (req, res, next) => {
         await conn.query(sql_register, function (err, rows, fields) {
             if (!err) {
                 console.log("rows : " + rows);
+                console.log(rows[0]);
             } else {
                 console.log("ERROR : " + err);
             }
@@ -68,5 +69,24 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
         return next(error);
     }
 });
+router.delete('/:number', async (req, res, next) => {
+    try {
+        var number = req.params.number;
+        conn.query('DELETE FROM PRODUCT WHERE Vin = ?', [number], function (err, rows, fields) {
+            if (!err) {
+                if(rows.affectedRows == 0){
+                    res.send('Delete failed');
+                }else{
+                    res.send('Success');
+                }
+            } else {
+                console.log("ERROR : "+err);
+            }
+        });
 
+    } catch (err) {
+        console.log(err);
+        return next(err);
+    }
+});
 module.exports = router;
