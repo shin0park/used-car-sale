@@ -6,6 +6,7 @@ var conn = mysql.createConnection(db_config);
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 var sql_register = 'SELECT PSerialNo, ManufacturerName, ModelName, Transmission, Bodytype, Color, OdometerValue, EngineFuel, EngineCapacity, YearProduced, PriceUsd, IsExchangeable, IsFixed, Vin FROM CAR, PRODUCT WHERE CAR.SerialNo=PRODUCT.PSerialNo ';
 var sql_register2 = "SELECT SerialNo FROM CAR AS C WHERE C.ManufacturerName = ? AND C.ModelName = ? AND C.Transmission = ? ";
+var sql_register3 = 'SELECT * FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
 //등록된 판매목록 불러오기
 router.get('/', async (req, res, next) => {
     try {
@@ -69,6 +70,25 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
         return next(error);
     }
 });
+
+router.get('/rcmd/:number', function (req, res, next) {
+    try {
+        var number = req.params.number;
+        console.log(number);
+        conn.query(sql_register3, [number, number], function (err, rows, fields) {
+            if (!err) {
+                console.log("rows : " + rows);
+            } else {
+                console.log("ERROR : " + err);
+            }
+            console.log(rows);
+        });
+    } catch (err) {
+        console.log(err);
+        return next(err);
+    }
+});
+
 router.delete('/:number', async (req, res, next) => {
     try {
         var number = req.params.number;
