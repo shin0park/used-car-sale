@@ -5,7 +5,11 @@ var db_config = require('../db_config/ajoutt_db.js');
 var conn = mysql.createConnection(db_config);
 // var sql_register3 = 'SELECT * FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
 // var sql_register = 'SELECT * FROM CAR WHERE SerialNo IN (SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
+<<<<<<< HEAD
 var sql_register4 = 'SELECT ManufacturerName, ModelName, PriceUsd FROM CAR AS C, PRODUCT AS P WHERE C.SerialNo = P.PSerialNo AND C.SerialNo IN (SELECT PSerialNo FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?))';
+=======
+var sql_register4 = 'SELECT ManufacturerName, ModelName, PriceUsd FROM CAR AS C, PRODUCT WHERE C.SerialNo IN (SELECT PSerialNo FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?))';
+>>>>>>> 747bcd981a087322aceb7df04b8a1cc9dfe1cb65
 var sql_register2 = 'SELECT * FROM CAR';
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 
@@ -16,11 +20,11 @@ router.get('/rcmd/:number', function (req, res, next) {
         console.log(number);
         conn.query(sql_register4, [number, number], function (err, rows, fields) {
             if (!err) {
-                console.log("rows : " + rows);
+                console.log("rows : " + rows[0]);
             } else {
                 console.log("ERROR : " + err);
             }
-            console.log(rows);
+            console.log(rows[0]);
             res.json(rows);
         });
     } catch (err) {
