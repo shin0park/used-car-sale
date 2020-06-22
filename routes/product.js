@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var db_config = require('../db_config/ajoutt_db.js');
 var conn = mysql.createConnection(db_config);
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
-var sql_register = 'SELECT ManufacturerName, ModelName, Transmission, Color, OdometerValue, YearProduced, EngineFuel, EngineCapacity, BodyType,  PriceUsd, IsExchangeable, IsFixed, Vin FROM CAR, PRODUCT WHERE CAR.SerialNo = PRODUCT.PSerialNo ';
+var sql_register = 'SELECT PSerialNo, ManufacturerName, ModelName, Transmission, Color, OdometerValue, YearProduced, EngineFuel, EngineCapacity, BodyType,  PriceUsd, IsExchangeable, IsFixed, Vin FROM CAR, PRODUCT WHERE CAR.SerialNo = PRODUCT.PSerialNo ';
 var sql_register2 = "SELECT SerialNo FROM CAR AS C WHERE C.ManufacturerName = ? AND C.ModelName = ? AND C.Transmission = ? ";
 var sql_register3 = 'SELECT * FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
 //등록된 판매목록 불러오기

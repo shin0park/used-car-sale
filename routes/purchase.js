@@ -33,15 +33,15 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     try {
         let params = [];
         let jsonObj = req.body;
+        console.log("purchase/ jsonObj")
         console.log(jsonObj);
-        params = [];
         params.push(id);
         for (var obj in jsonObj) {
             console.log(obj);
             params.push(jsonObj[obj]);
         }
         console.log(params);
-        await conn.query('INSERT INTO PURCHASE (PId, PurSerialNo, PDate) VALUES(?,?,?)', params, function (err, results, fields) {
+        await conn.query('INSERT INTO PURCHASE (PId, PurSerialNo) VALUES(?,?)', params, function (err, results, fields) {
             if (err) {
                 console.log("ERROR : " + err);
             } else {

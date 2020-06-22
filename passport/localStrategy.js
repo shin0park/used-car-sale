@@ -6,7 +6,7 @@ const conn = mysql.createConnection(db_config);
 
 module.exports = (passport) => {
     passport.use(new LocalStrategy({
-        usernameField: 'id', //req.body.sNumber
+        usernameField: 'id', //req.body.id
         passwordField: 'password',//req.body.password
     }, async (id, password, done) => {
         //done(에러, 성공, 실패)

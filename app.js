@@ -16,11 +16,9 @@ require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var tableRouter = require('./routes/table');
-var reviewRouter = require('./routes/review');
-var myClassRouter = require('./routes/myClass');
 var purchaseRouter = require('./routes/purchase');
 var productRouter = require('./routes/product');
+var carRouter = require('./routes/car');
 
 const passportConfig = require('./passport');
 
@@ -58,11 +56,9 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
-app.use('/table', tableRouter);
-app.use('/review', reviewRouter);
-app.use('/myClass', myClassRouter);
 app.use('/purchase', purchaseRouter);
 app.use('/product', productRouter);
+app.use('/car', carRouter);
 
 //위에서 걸리지 않은 get은 모두 vue로 넘김, 이승준 작성
 app.use(history()); //express.static보다 먼저 있어야지 뷰 라우터랑 연결됨. 이승준 작성
