@@ -6,7 +6,6 @@ var conn = mysql.createConnection(db_config);
 // var sql_register3 = 'SELECT * FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
 // var sql_register = 'SELECT * FROM CAR WHERE SerialNo IN (SELECT PriceUsd FROM PRODUCT WHERE Vin = ?)';
 var sql_register4 = 'SELECT ManufacturerName, ModelName, PriceUsd FROM CAR AS C, PRODUCT AS P WHERE C.SerialNo = P.PSerialNo AND C.SerialNo IN (SELECT PSerialNo FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?))';
-var sql_register4 = 'SELECT ManufacturerName, ModelName, PriceUsd FROM CAR AS C, PRODUCT WHERE C.SerialNo IN (SELECT PSerialNo FROM PRODUCT WHERE PriceUsd < 1.1*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?) AND PriceUsd > 0.9*(SELECT PriceUsd FROM PRODUCT WHERE Vin = ?))';
 var sql_register2 = 'SELECT * FROM CAR';
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 
